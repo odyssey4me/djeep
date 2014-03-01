@@ -1,47 +1,51 @@
-- model: rolemapper.role
+- fields: {description: Infrastructure Server, name: infrastructure}
+  model: rolemapper.role
   pk: 1
-  fields:
-    name: nova-infra
-    description: various nova infratructure
-
-- model: rolemapper.role
+- fields: {description: Compute Host, name: nova-compute}
+  model: rolemapper.role
   pk: 2
-  fields:
-    name: nova-compute
-    description: compute host
-
-- model: rolemapper.role
+- fields: {description: Swift Storage Host, name: swift-storage}
+  model: rolemapper.role
   pk: 3
-  fields:
-    name: swift-proxy
-    description: swift proxy
-
-- model: rolemapper.role
+- fields: {description: Ceph Storage Host, name: ceph-storage}
+  model: rolemapper.role
   pk: 4
-  fields:
-    name: swift-storage
-    description: swift proxy
-
-- model: rolemapper.rolemap
+- fields: {description: Graphite Server, name: graphite-server}
+  model: rolemapper.role
+  pk: 5
+- fields: {description: MySQL and RabbitMQ Host, name: sqlrmq-server}
+  model: rolemapper.role
+  pk: 6
+- fields: {description: Logging Server, name: log-server}
+  model: rolemapper.role
+  pk: 7
+- fields: {description: Zabbix Server, name: zabbix-server}
+  model: rolemapper.role
+  pk: 8
+- fields: {description: Zabbix Proxy Server, name: zabbix-proxy}
+  model: rolemapper.role
+  pk: 9
+- fields: {description: Openstack API Server, name: api-server}
+  model: rolemapper.role
+  pk: 10
+- fields: {description: Block Storage Server, name: block-storage}
+  model: rolemapper.role
+  pk: 11
+- fields: {description: Swift Management Server, name: swift-mgmt}
+  model: rolemapper.role
+  pk: 12
+- fields: {description: Web and Reverse Proxy Server, name: web-server}
+  model: rolemapper.role
+  pk: 13
+- fields: {name: nova-infra-node, role: 1}
+  model: rolemapper.rolemap
   pk: 1
-  fields:
-    role: 1
-    name: nova-infra-node
-
-- model: rolemapper.rolemap
+- fields: {name: nova-compute-node, role: 2}
+  model: rolemapper.rolemap
   pk: 2
-  fields:
-    role: 2
-    name: nova-compute-node
-
-- model: rolemapper.rolemap
+- fields: {name: swift-proxy-node, role: 3}
+  model: rolemapper.rolemap
   pk: 3
-  fields:
-    role: 3
-    name: swift-proxy-node
-
-- model: rolemapper.rolemap
+- fields: {name: swift-storage-node, role: 4}
+  model: rolemapper.rolemap
   pk: 4
-  fields:
-    role: 4
-    name: swift-storage-node
