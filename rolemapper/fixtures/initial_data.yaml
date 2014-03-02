@@ -3,7 +3,7 @@
   fields:
     key: domainname
     value: lab
-    description: ???
+    description: domain name for this site
 
 - model: rolemapper.config
   pk: 2
@@ -67,6 +67,69 @@
     key: chef_validation_pem
     value: validation.pem
     description: Name of the validation private key file
+
+- model: rolemapper.config
+  pk: 11
+  fields:
+    key: ubuntu_mirror
+    value: mirror.rackspace.com
+    description: The host name for the Ubuntu Mirror
+
+- model: rolemapper.config
+  pk: 12
+  fields:
+    key: ubuntu_directory
+    value: /ubuntu
+    description: The directory path for the Ubuntu Mirror
+
+- model: rolemapper.config
+  pk: 13
+  fields:
+    key: locale
+    value: en_US
+    description: The locale used for the OS deployment
+
+- model: rolemapper.config
+  pk: 14
+  fields:
+    key: timezone
+    value: US/Central
+    description: The time zone used for the OS deployment
+
+- model: rolemapper.config
+  pk: 15
+  fields:
+    key: install_drive
+    value: /dev/sda /dev/vda /dev/cciss/c0d0
+    description: The install drive options for the OS deployment
+
+- model: rolemapper.config
+  pk: 16
+  fields:
+    key: root_cryptpw
+    value: $1$5wm8ppD/$h4uMY0gPcTKRJgZHRszBk/
+    description: The encrypted password for the root user. Use 'openssl passwd -1 <password>' to determine the value you want.
+
+- model: rolemapper.config
+  pk: 17
+  fields:
+    key: default_username
+    value: demo
+    description: The username for the default user.
+
+- model: rolemapper.config
+  pk: 18
+  fields:
+    key: default_userdesc
+    value: Demo User
+    description: The user description for the default user.
+
+- model: rolemapper.config
+  pk: 19
+  fields:
+    key: default_cryptpw
+    value: $1$5wm8ppD/$h4uMY0gPcTKRJgZHRszBk/
+    description: The encrypted password for the default user. Use 'openssl passwd -1 <password>' to determine the value you want.
 
 - model: rolemapper.kicktarget
   pk: 1
