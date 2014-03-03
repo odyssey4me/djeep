@@ -10,7 +10,7 @@
 - fields: {description: Ceph Storage Host, name: ceph-storage}
   model: rolemapper.role
   pk: 4
-- fields: {description: Graphite Server, name: graphite}
+- fields: {description: Graphite and CollectD Server, name: graphite-server}
   model: rolemapper.role
   pk: 5
 - fields: {description: MySQL and RabbitMQ Host, name: sqlrmq-server}
