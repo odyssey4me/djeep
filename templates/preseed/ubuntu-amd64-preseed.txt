@@ -47,7 +47,7 @@ d-i apt-setup/services-select multiselect security
 d-i apt-setup/security_host string {{ site.ubuntu_mirror }}
 d-i apt-setup/security_path string {{ site.ubuntu_directory }}
 tasksel tasksel/first multiselect
-d-i pkgsel/include string openssh-server build-essential vim curl ethtool traceroute update-motd update-manager-core landscape-common vim acpid ntp dmidecode
+d-i pkgsel/include string openssh-server build-essential vim curl ethtool traceroute update-motd update-manager-core landscape-common vim acpid ntp dmidecode bridge-utils
 d-i pkgsel/update-policy select none
 d-i pkgsel/language-packs multiselect en
 d-i pkgsel/install-language-support boolean false
