@@ -121,7 +121,13 @@ ip link set net-gre up
 
 # Download and install the chef-client
 if [ ! -f /usr/bin/chef-client ]; then
+  {% if site.mirror_opscode %}
+     package=`curl -s http://{{site.mirror_opscode}}/ | egrep -o ">chef_.*.deb<" | sed "s/^>\(.*\)<$/\1/" | sort -V | tail -1`
+     wget -nv -P /tmp/ -nv -c http://{{site.mirror_opscode}}/${package}
+     dpkg -i /tmp/${package}
+  {% else %}
     bash < <(curl -s  http://www.opscode.com/chef/install.sh)
+  {% endif %}
 fi
 
 # Create the required directories
