@@ -34,7 +34,15 @@ iface ${interface} inet manual
 EOF
 done
 
+# Setup the local repo
+cat <<END >/etc/apt/sources.list
+deb http://{{ site.ubuntu_mirror }}{{ site.ubuntu_directory }} precise main restricted universe multiverse
+deb http://{{ site.ubuntu_mirror }}{{ site.ubuntu_directory }} precise-updates main restricted universe multiverse
+deb http://{{ site.ubuntu_mirror }}{{ site.ubuntu_directory }} precise-security main restricted universe multiverse
+END
+
 # Add bridge-utils package
+apt-get update -qq
 apt-get install -y bridge-utils
 
 # Setup the management interface
