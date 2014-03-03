@@ -16,7 +16,7 @@
 - fields: {description: MySQL and RabbitMQ Host, name: sqlrmq-server}
   model: rolemapper.role
   pk: 6
-- fields: {description: Logging Server, name: log-server}
+- fields: {description: Logging Server, name: rsyslog-server}
   model: rolemapper.role
   pk: 7
 - fields: {description: Zabbix Server, name: zabbix-server}
