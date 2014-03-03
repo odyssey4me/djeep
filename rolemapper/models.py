@@ -42,7 +42,14 @@ class Host(models.Model):
   role = models.ForeignKey('Role')
   kick_target = models.ForeignKey('KickTarget')
   local_boot = models.BooleanField(default=True)
+
   cluster = models.ForeignKey('Cluster')
+
+  use_openvswitch = models.BooleanField(default=False)
+  utility_net_bond = models.BooleanField(default=False)
+  utility_net_gre = models.BooleanField(default=False)
+  utility_net_san = models.BooleanField(default=False)
+  utility_net_interfaces = models.CharField(max_length=16, blank=True)
 
   ipmi_ip = models.CharField(max_length=16, blank=True)
   mgmt_ip = models.CharField(max_length=16, blank=True)
