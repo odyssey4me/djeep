@@ -4,4 +4,4 @@ eventlet
 pycrypto
 paramiko
 pyyaml
--e hg+https://bitbucket.org/jespern/django-piston#egg=django-piston
+-e hg+https://bitbucket.org/spookylukey/django-piston#egg=django-piston
