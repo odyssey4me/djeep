@@ -34,6 +34,9 @@ iface ${interface} inet manual
 EOF
 done
 
+# Add bridge-utils package
+apt-get install -y bridge-utils
+
 # Setup the management interface
 cat >>/etc/network/interfaces <<EOF
 
