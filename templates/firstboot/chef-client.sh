@@ -27,6 +27,97 @@ until ping -q -w 1 -c 1 `ip r | grep default | cut -d ' ' -f 3` > /dev/null; do
   sleep 5
 done
 
+{% if host.use_openvswitch %}
+# Install and configure OVS
+apt-get update -qq
+apt-get install -y openvswitch-switch openvswitch-common openvswitch-datapath-dkms dkms
+# Workaround bug https://bugs.launchpad.net/ubuntu/+source/openvswitch/+bug/1084028
+if [ ! -f /etc/init/openvswitch-switch.conf ]; then
+  wget -nv -O /etc/init/openvswitch-switch.conf https://launchpadlibrarian.net/140036861/openvswitch-switch.upstart
+  ln -fs /lib/init/upstart-job /etc/init.d/openvswitch-switch
+fi
+
+{% if host.utility_net_bond %}
+# Take net-mgmt down
+ip link set net-mgmt down
+# Remove the bridge
+brctl delbr net-mgmt
+# Remove the bridge config
+sed -i '/bridge_ports eth0/d' /etc/network/interfaces
+{% endif %}
+
+# Setup the OVS bridge
+service openvswitch-switch start
+sleep 10
+ovs-vsctl add-br br-trunk0
+
+{% if host.utility_net_bond %}
+# Setup the bond
+ovs-vsctl add-bond br-trunk0 bond0 {{host.utility_net_bond_interfaces}} lacp=active bond_mode=balance-tcp other_config:lacp_time=fast
+{% endif %}
+
+# Add the mgmt utility net
+{% if host.utility_net_bond %}
+ovs-vsctl add-port br-trunk0 net-mgmt tag={{site.net_mgmt_vlan}} -- set interface net-mgmt type=internal
+ip link set net-mgmt up
+{% endif %}
+
+{% if host.utility_net_san and host.utility_net_bond %}
+# Add the san utility net
+ovs-vsctl add-port br-trunk0 net-san tag={{site.net_san_vlan}} -- set interface net-san type=internal
+cat >>/etc/network/interfaces <<EOF
+
+auto net-san
+iface net-san inet static
+  address {{host.utility_net_san_address}}
+  netmask {{host.utility_net_san_netmask}}
+EOF
+ip link set net-san up
+{% endif %}
+
+{% if host.utility_net_gre and host.utility_net_bond %}
+# Add the gre utility net
+ovs-vsctl add-port br-trunk0 net-gre tag={{site.net_gre_vlan}} -- set interface net-gre type=internal
+cat >>/etc/network/interfaces <<EOF
+
+auto net-gre
+iface net-gre inet static
+  address {{host.utility_net_gre_address}}
+  netmask {{host.utility_net_gre_netmask}}
+EOF
+ip link set net-gre up
+{% endif %}
+
+{% else %}
+
+{% if host.utility_net_san %}
+# Add the san utility net
+cat >>/etc/network/interfaces <<EOF
+
+auto net-san
+iface net-san inet static
+  bridge_ports {{host.utility_net_san_interface}}
+  address {{host.utility_net_san_address}}
+  netmask {{host.utility_net_san_netmask}}
+EOF
+ip link set net-san up
+{% endif %}
+
+{% if host.utility_net_gre %}
+# Add the gre utility net
+cat >>/etc/network/interfaces <<EOF
+
+auto net-gre
+iface net-gre inet static
+  bridge_ports {{host.utility_net_gre_interface}}
+  address {{host.utility_net_gre_address}}
+  netmask {{host.utility_net_gre_netmask}}
+EOF
+ip link set net-gre up
+{% endif %}
+
+{% endif %}
+
 # Download and install the chef-client
 if [ ! -f /usr/bin/chef-client ]; then
     bash < <(curl -s  http://www.opscode.com/chef/install.sh)
