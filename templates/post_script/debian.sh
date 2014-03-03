@@ -13,8 +13,7 @@ ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa
 
 # Ensure that the hostname and hosts file are correctly configured
 echo "{{host.hostname}}" > /etc/hostname
-sed -i "s/127.0.1.1.*/{{host.ip_address}} {{host.hostname}}.{{site.domainname}} {{host.hostname
-}}/" /etc/hosts
+sed -i "s/127.0.1.1.*/{{host.ip_address}} {{host.hostname}}.{{site.domainname}} {{host.hostname}}/" /etc/hosts
 
 # Setup all network interfaces
 cat >/etc/network/interfaces <<EOF
