@@ -10,8 +10,9 @@
 # Description:       Firstboot actions
 ### END INIT INFO
 
-#set -e
-#set -x
+# Enable debug output and exit on error
+set -e
+set -x
 
 sleep 10
 
@@ -156,7 +157,7 @@ wget -O /etc/chef/validation.pem http://{{site.webservice_host}}:{{site.webservi
 
 # Configure chef-client upstart
 cp /opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-`dpkg-query --show chef | awk '{print $2}' | awk -F- '{print $1}'`/distro/debian/etc/init/chef-client.conf /etc/init/
-ln -s /lib/init/upstart-job /etc/init.d/chef-client
+ln -fs /lib/init/upstart-job /etc/init.d/chef-client
 
 # If a role is assigned, use it
 {% if host.role %}

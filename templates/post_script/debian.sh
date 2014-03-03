@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Enable debug output and exit on error
+set -e
+set -x
+
 # Fetch the firstboot script and set it to execute on next boot
 curl -skS http://{{site.webservice_host}}:{{site.webservice_port}}/firstboot/{{host.id}} > /root/install.sh
 
