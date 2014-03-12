@@ -101,7 +101,7 @@ iface net-san inet static
   address {{host.utility_net_san_address}}
   netmask {{host.utility_net_san_netmask}}
 EOF
-ip link set net-san up
+ifup net-san
 {% endif %}
 
 {% if host.utility_net_gre %}
@@ -114,7 +114,7 @@ iface net-gre inet static
   address {{host.utility_net_gre_address}}
   netmask {{host.utility_net_gre_netmask}}
 EOF
-ip link set net-gre up
+ifup net-gre
 {% endif %}
 
 {% endif %}
