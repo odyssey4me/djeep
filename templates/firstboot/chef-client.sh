@@ -165,6 +165,28 @@ wget -O /etc/chef/validation.pem http://{{site.webservice_host}}:{{site.webservi
 cp /opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-`dpkg-query --show chef | awk '{print $2}' | awk -F- '{print $1}'`/distro/debian/etc/init/chef-client.conf /etc/init/
 ln -fs /lib/init/upstart-job /etc/init.d/chef-client
 
+# Add an ohai plugin to ensure that chef-client considers 'net-mgmt'
+# as the primary ethernet interface, regardless of default gateway.
+# This is necessary as nova-network puts the default gateway on
+# a different interface.
+cat <<END >/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/`ls -1 /opt/chef/embedded/lib/ruby/gems/1.9.1/gems/ | grep ohai`/lib/ohai/plugins/custom-mgmtlan-ip.rb
+provide "ipaddress"
+require_plugin "platform"
+require_plugin "network"
+require_plugin "#{os}::network"
+if network["interfaces"]["net-mgmt"]["addresses"]
+  Ohai::Log.debug("custom-mgmtlan-ip: net-mgmt interface found")
+  network["interfaces"]["net-mgmt"]["addresses"].each do |ip, params|
+    if params['family'] == ('inet')
+      Ohai::Log.debug("custom-mgmtlan-ip: Setting node['ipaddress'] to #{ip}.")
+      ipaddress ip
+    end
+  end
+else
+  Ohai::Log.debug("custom-mgmtlan-ip: net-mgmt interface not found")
+end
+END
+
 # If a role is assigned, use it
 {% if host.role %}
 cat > /etc/chef/firstboot.json <<EOF
